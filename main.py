@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from sys import exit
 from player import Player
+from mob import Mob
 
 pygame.init()
 alt = 1920
@@ -11,8 +12,14 @@ display = pygame.display.set_mode([alt, larg])
 pygame.display.set_caption("Monster Ranch")
 
 objectGroup = pygame.sprite.Group()
+mobs = pygame.sprite.Group()
 
-player = Player(objectGroup)
+pl = Player(objectGroup)
+
+m1 = Mob(mobs)
+m1.rect.x = 450
+m1.rect.y = 450
+
 
 fonte = pygame.font.SysFont("arial", 40, True, True)
 pontos = 0
@@ -33,7 +40,7 @@ ispressing = False
 
 if __name__ == '__main__':
     while gameLoop:
-        clock.tick(1000)
+        clock.tick(30)
         mensagem = fonte.render(f"Score: {pontos}", True, [255, 255, 255])
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -43,7 +50,10 @@ if __name__ == '__main__':
                 if event.key == pygame.K_SPACE:
                     shoot.play()
         draw()
-        player.update()
+        pl.update()
+        m1.update(pl)
         objectGroup.draw(display)
+        mobs.draw(display)
+        objectGroup.update()
         display.blit(mensagem, [800, 20])
-        pygame.display.update()
+        pygame.display.flip()
