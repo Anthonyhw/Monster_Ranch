@@ -1,27 +1,46 @@
 import pygame
 from random import randint
 
+
 class Mob(pygame.sprite.Sprite):
-    def __init__(self, *groups):
-        super().__init__(*groups)
+    def __init__(self):
+
+        respawn_x = randint(-40, 904)
+        respawn_y = randint(-40, 856)
+
+        aleat = randint(1, 2)
+        print(aleat)
+
+        if aleat == 1:
+            respawn_x = randint(-80, 904)
+            while respawn_y > 0 and respawn_y < 816:
+                respawn_y = randint(-80, 856)
+        elif aleat == 2:
+            while respawn_x > 0 and respawn_x < 864:
+                respawn_x = randint(-80, 904)
+            respawn_y = randint(-80, 856)
+
+
+
+        super().__init__()
         pygame.sprite.Sprite.__init__(self)
         self.sprites = []
-        spritesheet = pygame.image.load("data\\skeleton-red_eyes-SWEN.png")
+        sprite_sheet = pygame.image.load("data\\skeleton-red_eyes-SWEN.png")
         for i in range(3):
             for j in range(4):
-                img = spritesheet.subsurface([i * 24, j * 32], [24, 32])
+                img = sprite_sheet.subsurface([i * 24, j * 32], [24, 32])
+                img = pygame.transform.scale(img, [80, 80])
                 self.sprites.append(img)
 
         self.atual = 4
         self.cont = 0
 
         self.image = self.sprites[self.atual]
-        self.image = pygame.transform.scale(self.image, [80, 80])
         self.rect = self.image.get_rect()
-        self.rect.center = [randint(0, 864), randint(0, 864)]
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect.center = [respawn_x, respawn_y]
 
-    def update(self, player):
-
+    def move(self, player):
         self.cont += 0.5
 
         if self.cont < 4:
@@ -36,19 +55,16 @@ class Mob(pygame.sprite.Sprite):
             self.cont = 0
 
         self.image = self.sprites[int(self.atual)]
-        self.image = pygame.transform.scale(self.image, [80, 80])
 
-        if player.rect.x + 32 > self.rect.x:
+        if player.rect.x > self.rect.x:
             self.rect.x = self.rect.x + 1
         else:
             self.rect.x = self.rect.x - 1
 
-        if player.rect.y + 32 > self.rect.y:
+        if player.rect.y > self.rect.y:
             self.rect.y = self.rect.y + 1
         else:
             self.rect.y = self.rect.y - 1
 
-        if self.rect.colliderect(player):
-            return True
-            #self.rect.x = randint(0, 864)
-            #self.rect.y = randint(0, 816)
+    def update(self, player):
+        self.move(player)
