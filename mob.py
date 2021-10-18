@@ -9,7 +9,6 @@ class Mob(pygame.sprite.Sprite):
         respawn_y = randint(-40, 856)
 
         aleat = randint(1, 2)
-        print(aleat)
 
         if aleat == 1:
             respawn_x = randint(-80, 904)

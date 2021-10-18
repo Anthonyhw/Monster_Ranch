@@ -14,6 +14,10 @@ class Player(pygame.sprite.Sprite):
         self.cont = 0
         self.scale = 80
         self.flip = False
+        self.lc = False
+        self.rc = False
+        self.tc = False
+        self.bc = False
 
         self.image = self.sprites[self.atual]
         self.image = pygame.transform.scale(self.image, [self.scale, self.scale])
@@ -22,7 +26,6 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = [432, 408]
 
     def move(self):
-
         keys = pygame.key.get_pressed()
 
         self.cont += 0.05
@@ -40,31 +43,30 @@ class Player(pygame.sprite.Sprite):
             self.image = pygame.transform.flip(self.image, True, False)
 
         if keys[pygame.K_d]:
-            if self.rect.x >= 814:
+            if self.rect.x > 807:
                 pass
             else:
                 self.rect.x += 3
                 self.flip = True
 
         if keys[pygame.K_a]:
-            if self.rect.x <= -32:
+            if self.rect.x < -25:
                 pass
             else:
                 self.rect.x -= 3
                 self.flip = False
 
         if keys[pygame.K_w]:
-            self.rect.y -= 3
+            if self.rect.y <= 0:
+                pass
+            else:
+                self.rect.y -= 3
 
         if keys[pygame.K_s]:
-            self.rect.y += 3
+            if self.rect.y >= 740:
+                pass
+            else:
+                self.rect.y += 3
 
-        """
-        if keys[pygame.KEYUP]:
-            self.atual = 0
-            self.image = self.sprites[int(self.atual)]
-        """
-
-    def update(self, ):
+    def update(self):
         self.move()
-
